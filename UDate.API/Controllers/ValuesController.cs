@@ -3,16 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using UDate.API.Data;
 
 namespace UDate.API.Controllers
 {
+
+    
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private readonly DataContext _context;
+
+        public ValuesController(DataContext context)
+        {
+            _context = context;            
+        }
+
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public IActionResult GetValues()
         {
             return new string[] { "value1", "value2" };
         }
@@ -21,7 +31,8 @@ namespace UDate.API.Controllers
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            return "value";
+            var values = _context.Values.ToList();
+            return Ok(values);
         }
 
         // POST api/values
